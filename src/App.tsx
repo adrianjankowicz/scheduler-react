@@ -1,17 +1,12 @@
 import React from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-import Scheduler from "./components/Scheduler";
+import SchedulerComponent from "./components/Scheduler";
 import Home from "./components/Home";
 
 import { UserProvider } from "./context/UserContext";
 import { useUser } from "./context/UserContext";
-
-const theme = createTheme({
-  palette: {
-    mode: 'dark',
-  },
-});
+import { ThemeContextProvider } from "./context/ThemeContext";
 
 function App() {
   return (
@@ -25,9 +20,9 @@ const AppContent: React.FC = () => {
   const { user } = useUser(); 
 
   return (
-      <ThemeProvider theme={theme}>
-        {user ? <Scheduler /> : <Home />}
-      </ThemeProvider>
+    <ThemeContextProvider>
+        {user ? <SchedulerComponent /> : <Home />}
+        </ThemeContextProvider>
   );
 };
 
