@@ -7,7 +7,6 @@ import {
   DayView,
   Toolbar,
   DateNavigator,
-  ViewSwitcher,
 } from '@devexpress/dx-react-scheduler-material-ui';
 import { EditingState, IntegratedEditing, AppointmentModel, ViewState } from '@devexpress/dx-react-scheduler';
 import { db } from '../firebase/firebase';
@@ -16,6 +15,10 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import Header from './Header';
+import CustomViewSwitcher from './CustomViewSwitcher';
+import { Box } from '@mui/material';
+dayjs.locale('pl')
+
 
 const SchedulerComponent: React.FC = () => {
   const [data, setData] = useState<AppointmentModel[]>([]);
@@ -81,7 +84,12 @@ const SchedulerComponent: React.FC = () => {
           <Appointments />
           <Toolbar />
           <DateNavigator />
-          <ViewSwitcher />
+          <Box className='flex justify-end flex-grow w-full border-b border-gray-300'>
+          <CustomViewSwitcher 
+              currentViewName={currentViewName}
+              onViewChange={setCurrentViewName} 
+            />
+            </Box>
         </Scheduler>
       </LocalizationProvider>
     </div>

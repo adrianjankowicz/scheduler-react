@@ -37,7 +37,7 @@ const Header: React.FC<HeaderProps> = ({ position = "static" }) => {
         ) : user ? (
           <Box className="md:flex mt-8 sm:mt-0 flex-col space-y-2 md:space-y-0 md:flex-row justify-center items-center space-x-4">
             <Box className='hidden lg:flex justify-center items-center space-x-2'>
-            <h2 className="text-gray-600 inline">
+            <h2 className=" inline">
               Witaj, <span className="font-semibold">{user.displayName}</span>
             </h2>
             <Avatar

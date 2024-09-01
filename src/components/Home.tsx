@@ -1,4 +1,3 @@
-// src/components/Home.tsx
 import React from "react";
 import { Box, Button, Grid2 as Grid } from "@mui/material";
 import Header from "./Header";
