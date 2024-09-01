@@ -1,14 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { auth, provider } from "../firebase/firebase";
 import { useUser } from '../context/UserContext';
 import { Button, Box, Avatar, CircularProgress } from "@mui/material";
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  position?: "absolute" | "static";
+}
+const Header: React.FC<HeaderProps> = ({ position = "static" }) => {
 
     const { user, isLoading, handleLogin, handleLogout } = useUser();
 
   return (
     <Box
-      className="absolute">
+      className={` ${
+        position === "absolute" ? "absolute" : "static"
+      } top-0 left-0 right-0`}
+    >
       <h1
         className="text-center text-red-400 flex-nowrap whitespace-nowrap overflow-hidden font-bold text-2xl sm:text-4xl md:text-7xl lg:text-8xl py-5"
         style={{ textShadow: "0 0 5px black, 0 0 20px white" }}
