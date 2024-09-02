@@ -1,6 +1,14 @@
-import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
+import { plPL as corePlPL } from "@mui/material/locale";
+import { plPL } from "@mui/x-date-pickers/locales";
 
 interface ThemeContextProps {
   toggleTheme: () => void;
@@ -19,23 +27,27 @@ export const useThemeContext = () => {
 
 export const ThemeContextProvider = ({ children }: { children: ReactNode }) => {
   const [isDarkMode, setIsDarkMode] = useState(() => {
-    const savedTheme = localStorage.getItem('theme');
-    return savedTheme === 'dark';
+    const savedTheme = localStorage.getItem("theme");
+    return savedTheme === "dark";
   });
 
   const toggleTheme = () => {
     setIsDarkMode((prev) => {
       const newTheme = !prev;
-      localStorage.setItem('theme', newTheme ? 'dark' : 'light');
+      localStorage.setItem("theme", newTheme ? "dark" : "light");
       return newTheme;
     });
   };
 
-  const theme = createTheme({
-    palette: {
-      mode: isDarkMode ? "dark" : "light",
+  const theme = createTheme(
+    {
+      palette: {
+        mode: isDarkMode ? "dark" : "light",
+      },
     },
-  });
+    plPL,
+    corePlPL
+  );
 
   return (
     <ThemeContext.Provider value={{ toggleTheme, isDarkMode }}>
