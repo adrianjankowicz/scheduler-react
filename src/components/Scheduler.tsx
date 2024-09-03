@@ -5,6 +5,7 @@ import {
   EditingState,
   IntegratedEditing,
   ChangeSet,
+  FormatterFn,
 } from "@devexpress/dx-react-scheduler";
 import {
   Scheduler,
@@ -19,20 +20,37 @@ import {
   DateNavigator,
   Toolbar,
   TodayButton,
+  ViewSwitcher,
 } from "@devexpress/dx-react-scheduler-material-ui";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+
 import dayjs from "dayjs";
 import Header from "./Header";
-import CustomViewSwitcher from "./CustomViewSwitcher";
 import { Box } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
-import { plPL } from "@mui/x-date-pickers/locales";
+import { deDE } from "@mui/x-date-pickers/locales";
+import updateLocale from "dayjs/plugin/updateLocale";
+import {
+  collection,
+  query,
+  onSnapshot,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  doc,
+  where,
+  setDoc,
+} from "firebase/firestore";
+import { auth, db } from "../firebase/firebase";
 
+dayjs.locale("de");
+dayjs.extend(updateLocale);
 
-dayjs.locale("pl");
+dayjs.updateLocale("de", {
+  weekStart: 1,
+});
 
 interface AppointmentModel {
-  id: number;
   title: string;
   startDate: Date;
   endDate: Date;
@@ -41,30 +59,11 @@ interface AppointmentModel {
   allDay?: boolean;
   location?: string;
   customField?: string;
+  userId: string;
+  id: string;
 }
 
 const KEYBOARD_KEY = "Shift";
-
-const appointments: AppointmentModel[] = [
-  {
-    id: 1,
-    title: "Website Re-Design Plan",
-    startDate: new Date(2024, 9, 25, 9, 15),
-    endDate: new Date(2018, 9, 25, 11, 30),
-  },
-  {
-    id: 2,
-    title: "Book Flights to San Fran for Sales Trip",
-    startDate: new Date(2024, 9, 2, 12, 11),
-    endDate: new Date(2024, 9, 5, 13, 0),
-  },
-  {
-    id: 3,
-    title: "Install New Router in Dev Room",
-    startDate: new Date(2024, 9, 7, 13, 30),
-    endDate: new Date(2024, 9, 7, 14, 35),
-  },
-];
 
 const TextEditor = (props: any) => {
   if (props.type === "multilineTextEditor") {
@@ -97,92 +96,123 @@ const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: any) => {
 };
 
 const SchedulerComponent: React.FC = () => {
-  const [data, setData] = useState<AppointmentModel[]>(appointments);
+  const [data, setData] = useState<AppointmentModel[]>([]);
   const [currentDate, setCurrentDate] = useState(dayjs());
   const [isShiftPressed, setIsShiftPressed] = useState<boolean>(false);
   const [currentViewName, setCurrentViewName] = useState("Month");
 
+  useEffect(() => {
+    const userId = auth.currentUser?.uid;
+
+    if (userId) {
+      const q = query(
+        collection(db, "appointments"),
+        where("userId", "==", userId)
+      );
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        const appointmentsFromFirestore: AppointmentModel[] = [];
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          appointmentsFromFirestore.push({
+            title: data.title,
+            startDate: data.startDate.toDate(),
+            endDate: data.endDate.toDate(),
+            customField: data.customField,
+            userId: data.userId,
+            id: doc.id,
+          } as AppointmentModel);
+        });
+        setData(appointmentsFromFirestore);
+      });
+
+      return () => unsubscribe();
+    }
+  }, []);
+
   const commitChanges = useCallback(
-    ({ added, changed, deleted }: ChangeSet) => {
-      setData((prevData) => {
-        let updatedData = prevData;
+    async ({ added, changed, deleted }: ChangeSet) => {
+      const userId = auth.currentUser?.uid;
+      console.log('datra', data);
 
-        if (added) {
-          const startingAddedId =
-            updatedData.length > 0
-              ? updatedData[updatedData.length - 1].id + 1
-              : 0;
+      if (!userId) return;
+      
+      if (added) {
+        console.log(1);
+        const newAppointment: AppointmentModel = {
+          title: added.title || "Bez nazwy",
+          startDate: dayjs(added.startDate).toDate(),
+          endDate: dayjs(added.endDate).toDate(),
+          customField: added.customField || "",
+          userId,
+          id: "",
+        };
 
-          const newAppointment: AppointmentModel = {
-            id: startingAddedId,
-            title: added.title || "",
-            startDate: dayjs(added.startDate).isValid()
-              ? dayjs(added.startDate).toDate()
-              : dayjs().toDate(),
-            endDate: dayjs(added.endDate).isValid()
-              ? dayjs(added.endDate).toDate()
-              : dayjs().toDate(),
-            customField: added.customField || "",
-          };
+        const docRef = doc(collection(db, "appointments"));
+        const createdAppointment = { ...newAppointment, id: docRef.id };
 
-          updatedData = [...updatedData, newAppointment];
-        }
+        await setDoc(docRef, createdAppointment);
+        // setData((prevData) => [
+        //   ...prevData,
+        //   createdAppointment, // Add the new appointment to state
+        // ]);
+      }
 
-        if (changed) {
-          if (isShiftPressed) {
-            const changedAppointment = updatedData.find(
-              (appointment) => changed[appointment.id]
-            );
-            if (changedAppointment) {
-              const startingAddedId =
-                updatedData.length > 0
-                  ? updatedData[updatedData.length - 1].id + 1
-                  : 0;
-
-              const newAppointment = {
-                ...changedAppointment,
-                id: startingAddedId,
-                startDate: dayjs(
-                  changed[changedAppointment.id].startDate
-                ).isValid()
-                  ? dayjs(changed[changedAppointment.id].startDate).toDate()
-                  : dayjs().toDate(),
-                endDate: dayjs(changed[changedAppointment.id].endDate).isValid()
-                  ? dayjs(changed[changedAppointment.id].endDate).toDate()
-                  : dayjs().toDate(),
-                ...changed[changedAppointment.id],
-              };
-
-              updatedData = [...updatedData, newAppointment];
-            }
-          } else {
-            updatedData = updatedData.map((appointment) => {
-              if (changed[appointment.id]) {
-                return {
+      if (changed) {
+        console.log("Changed appointments:", changed);
+  
+        let updatedAppointments = [...data];
+  
+        if (isShiftPressed) {
+          const changedAppointment = updatedAppointments.find((appointment) => changed[appointment.id]);
+          if (changedAppointment) {
+            const startingAddedId = updatedAppointments.length > 0 ? updatedAppointments[updatedAppointments.length - 1].id + 1 : 0;
+            const newAppointment = {
+              ...changedAppointment,
+              id: startingAddedId,
+              startDate: dayjs(changed[changedAppointment.id].startDate).toDate(),
+              endDate: dayjs(changed[changedAppointment.id].endDate).toDate(),
+            };
+  
+            const docRef = doc(collection(db, "appointments"));
+            const createdAppointment = { ...newAppointment, id: docRef.id };
+  
+            await setDoc(docRef, createdAppointment);
+            
+            updatedAppointments = [...updatedAppointments, createdAppointment];
+          }
+        } else {
+          updatedAppointments = await Promise.all(
+            updatedAppointments.map(async (appointment) => {
+              const appointmentId = appointment.id;
+              const appointmentChanges = changed[appointmentId];
+  
+              if (appointmentChanges) {
+                const updatedAppointment = {
                   ...appointment,
-                  startDate: dayjs(changed[appointment.id].startDate).isValid()
-                    ? dayjs(changed[appointment.id].startDate).toDate()
-                    : dayjs().toDate(),
-                  endDate: dayjs(changed[appointment.id].endDate).isValid()
-                    ? dayjs(changed[appointment.id].endDate).toDate()
-                    : dayjs().toDate(),
-                  ...changed[appointment.id],
+                  startDate: dayjs(appointmentChanges.startDate).toDate(),
+                  endDate: dayjs(appointmentChanges.endDate).toDate(),
                 };
+  
+                const appointmentDocRef = doc(db, "appointments", appointmentId);
+                await updateDoc(appointmentDocRef, updatedAppointment);
+                return updatedAppointment;
               }
               return appointment;
-            });
-          }
-        }
-
-        if (deleted !== undefined) {
-          updatedData = updatedData.filter(
-            (appointment) => appointment.id !== deleted
+            })
           );
         }
-        return updatedData;
-      });
+  
+        setData(updatedAppointments);
+      }
+
+      if (deleted !== undefined) {
+        console.log(3);
+        const docRef = doc(db, "appointments", deleted.toString());
+        await deleteDoc(docRef);
+        setData(data.filter((appointment) => appointment.id !== deleted));
+      }
     },
-    [isShiftPressed]
+    [data, isShiftPressed]
   );
 
   const onKeyDown = useCallback((event: KeyboardEvent) => {
@@ -210,10 +240,14 @@ const SchedulerComponent: React.FC = () => {
   return (
     <LocalizationProvider
       dateAdapter={AdapterDayjs}
-      localeText={plPL.components.MuiLocalizationProvider.defaultProps.localeText}      >
+      localeText={
+        deDE.components.MuiLocalizationProvider.defaultProps.localeText
+      }
+      adapterLocale="de"
+    >
       <Paper>
         <Header />
-        <Scheduler data={data} height={660} locale="pl-PL">
+        <Scheduler data={data} height={700} locale="pl-PL">
           <ViewState
             currentDate={currentDate.format("YYYY-MM-DD")}
             onCurrentDateChange={(date) => setCurrentDate(dayjs(date))}
@@ -227,14 +261,11 @@ const SchedulerComponent: React.FC = () => {
           <MonthView />
           <Appointments />
           <Toolbar />
-          <TodayButton/>
-          {/* <DateNavigator /> */}
-          <Box className="flex justify-end flex-grow w-full border-b border-gray-300">
-            <CustomViewSwitcher
-              currentViewName={currentViewName}
-              onViewChange={setCurrentViewName}
-            />
-          </Box>
+          <TodayButton />
+          <DateNavigator />
+          <ViewSwitcher />
+          {
+}
           <AppointmentTooltip showOpenButton showDeleteButton />
           <AppointmentForm
             basicLayoutComponent={BasicLayout}

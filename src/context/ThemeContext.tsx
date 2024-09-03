@@ -7,8 +7,8 @@ import React, {
 } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import { plPL as corePlPL } from "@mui/material/locale";
-import { plPL } from "@mui/x-date-pickers/locales";
+import { deDE } from '@mui/x-date-pickers/locales';
+
 
 interface ThemeContextProps {
   toggleTheme: () => void;
@@ -45,8 +45,7 @@ export const ThemeContextProvider = ({ children }: { children: ReactNode }) => {
         mode: isDarkMode ? "dark" : "light",
       },
     },
-    plPL,
-    corePlPL
+    deDE
   );
 
   return (
