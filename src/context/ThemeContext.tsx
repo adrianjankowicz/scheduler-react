@@ -3,12 +3,12 @@ import React, {
   useContext,
   useState,
   ReactNode,
-  useEffect,
 } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import { deDE } from '@mui/x-date-pickers/locales';
-
+import { plPL as corePlPL } from "@mui/material/locale";
+import { plPL as pickersPlPL } from "@mui/x-date-pickers";
+import { plPL as dataGridPlPL } from '@mui/x-data-grid/locales';
 
 interface ThemeContextProps {
   toggleTheme: () => void;
@@ -45,14 +45,16 @@ export const ThemeContextProvider = ({ children }: { children: ReactNode }) => {
         mode: isDarkMode ? "dark" : "light",
       },
     },
-    deDE
+    corePlPL,
+    pickersPlPL,
+    dataGridPlPL
   );
 
   return (
     <ThemeContext.Provider value={{ toggleTheme, isDarkMode }}>
       <ThemeProvider theme={theme}>
-        <CssBaseline />
-        {children}
+        <CssBaseline />{" "}
+          {children}
       </ThemeProvider>
     </ThemeContext.Provider>
   );

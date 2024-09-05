@@ -47,7 +47,7 @@ const Header: React.FC<HeaderProps> = ({ position = "static" }) => {
             />
             </Box>
             <Button onClick={handleLogout} variant="outlined">
-              Logout
+              Wyloguj
             </Button>
           </Box>
         ) : (
@@ -57,7 +57,7 @@ const Header: React.FC<HeaderProps> = ({ position = "static" }) => {
               alt="Google Logo"
               className="w-[20px] mr-2"
             />
-            <span className="hidden sm:inline">Log In</span>
+            <span className="hidden sm:inline">Zaloguj</span>
           </Button>
         )}
       </Box>

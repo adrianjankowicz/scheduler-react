@@ -9,7 +9,7 @@ export interface AppointmentModel {
   allDay: boolean;
   location?: string;
   notes?: string;
-  type:  string;
+  appointmentType:  string;
   userId: string;
   id: string;
 }

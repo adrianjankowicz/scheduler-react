@@ -1,13 +1,8 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { auth, provider } from '../firebase/firebase';
 import { signInWithPopup, User } from 'firebase/auth';
+import { UserContextType } from '../types/types';
 
-interface UserContextType {
-  user: User | null;
-  isLoading: boolean;
-  handleLogin: () => void;
-  handleLogout: () => void;
-}
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 

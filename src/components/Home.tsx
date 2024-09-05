@@ -1,8 +1,8 @@
 import React from "react";
-import { Box, Button, Grid2 as Grid } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import Header from "./Header";
 import { useUser } from "../context/UserContext";
-import calendarView from "../utils/calendarView.png";
+import calendarView from "../images/calendarView.png";
 
 const Home: React.FC = () => {
   const { handleLogin } = useUser();
