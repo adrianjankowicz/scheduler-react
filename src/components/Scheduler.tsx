@@ -19,7 +19,7 @@ import {
   DateNavigator,
   Toolbar,
   TodayButton,
-  ViewSwitcher,
+  // ViewSwitcher,
 } from "@devexpress/dx-react-scheduler-material-ui";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import Header from "./Header";
@@ -30,7 +30,6 @@ import {
   collection,
   query,
   onSnapshot,
-  addDoc,
   updateDoc,
   deleteDoc,
   doc,
@@ -41,8 +40,7 @@ import {
 import { auth, db } from "../firebase/firebase";
 
 import dayjs from "dayjs";
-import { plPL } from "@mui/x-date-pickers/locales";
-import "dayjs/locale/pl";
+import pl from "dayjs/locale/pl";
 
 import BasicLayout from "./BasicLayout";
 import { AppointmentModel } from "../types/types";
@@ -54,16 +52,8 @@ import CustomDateEditor from "./CustomDateEditor";
 dayjs.locale("pl");
 dayjs.extend(updateLocale);
 
-dayjs.updateLocale('pl', {
+dayjs.updateLocale("pl", {
   weekStart: 1,
-  formats: {
-    LT: 'HH:mm',
-    LTS: 'HH:mm:ss',
-    L: 'DD.MM.YYYY',
-    LL: 'D MMMM YYYY',
-    LLL: 'D MMMM YYYY HH:mm',
-    LLLL: 'dddd, D MMMM YYYY HH:mm',
-  },
 });
 
 const KEYBOARD_KEY = "Shift";
@@ -131,7 +121,6 @@ const SchedulerComponent: React.FC = () => {
         //   createdAppointment, // Add the new appointment to state
         // ]);
       }
-      console.log("Changed:", changed);
       if (changed) {
         let updatedAppointments = [...data];
 
@@ -167,7 +156,6 @@ const SchedulerComponent: React.FC = () => {
               const appointmentChanges = changed[appointmentId];
 
               if (appointmentChanges) {
-                console.log("app", appointmentChanges);
                 const updatedAppointment = {
                   ...appointment,
                   ...appointmentChanges,
@@ -179,7 +167,6 @@ const SchedulerComponent: React.FC = () => {
                     appointmentChanges.endDate || appointment.endDate
                   ).toDate(),
                 };
-                console.log("app2", updatedAppointment);
 
                 const appointmentDocRef = doc(
                   db,
@@ -193,10 +180,8 @@ const SchedulerComponent: React.FC = () => {
             })
           );
         }
-        console.log("up", updatedAppointments);
 
         setData(updatedAppointments);
-        console.log("data", data);
       }
 
       if (deleted !== undefined) {
@@ -234,7 +219,7 @@ const SchedulerComponent: React.FC = () => {
     <Box>
       <Paper>
         <Header />
-        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pl">
+        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={pl}>
           <Scheduler data={data} height={700} locale="pl-PL">
             <ViewState
               currentDate={currentDate.format("YYYY-MM-DD")}
@@ -269,10 +254,12 @@ const SchedulerComponent: React.FC = () => {
             <TodayButton messages={{ today: "Dzisiaj" }} />
             <DateNavigator />
             {/* <ViewSwitcher /> */}
-            <CustomViewSwitcher
-              currentViewName={currentViewName}
-              onViewChange={setCurrentViewName}
+            <Box className="flex justify-end absolute right-0">
+              <CustomViewSwitcher
+                currentViewName={currentViewName}
+                onViewChange={setCurrentViewName}
               />
+            </Box>
             <AppointmentTooltip showOpenButton showDeleteButton />
             <AppointmentForm
               basicLayoutComponent={BasicLayout}
@@ -322,8 +309,12 @@ const SchedulerComponent: React.FC = () => {
               }}
             />
             <DragDropProvider
-              draftAppointmentComponent={DraftAppointment}
-              sourceAppointmentComponent={SourceAppointment}
+              draftAppointmentComponent={(props) => (
+                <DraftAppointment {...props} currentView={currentViewName} />
+              )}
+              sourceAppointmentComponent={(props) => (
+                <SourceAppointment {...props} currentView={currentViewName} />
+              )}
             />
           </Scheduler>
         </LocalizationProvider>

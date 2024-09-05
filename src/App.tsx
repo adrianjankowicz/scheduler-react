@@ -20,7 +20,7 @@ const AppContent: React.FC = () => {
 
   return (
     <ThemeContextProvider>
-        {user ? <SchedulerComponent /> : <Home />}
+        {user ? <SchedulerComponent/> : <Home />}
         </ThemeContextProvider>
   );
 };

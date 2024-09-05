@@ -1,20 +1,18 @@
 import {
   Toolbar,
-  DateNavigator,
-  TodayButton,
 } from "@devexpress/dx-react-scheduler-material-ui";
-import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import { FormControl, MenuItem, Select } from "@mui/material";
 
 const CustomViewSwitcher = ({ currentViewName, onViewChange }: any) => (
-  <Toolbar.Root className="flex items-center">
-    <FormControl className="ml-2 border border-gray-300 rounded-md">
+  <Toolbar.Root className="flex items-center" style={{ borderBottom: 'none' }}>
+    <FormControl className='ml-2 rounded-md'>
       <Select
         id="view-select"
         value={currentViewName}
         onChange={(event) => onViewChange(event.target.value)}
         displayEmpty
         inputProps={{ "aria-label": "Without label" }}
-        className="w-full p-2"
+        className="w-full "
       >
         <MenuItem value="Day">Dzień</MenuItem>
         <MenuItem value="Week">Tydzień</MenuItem>
