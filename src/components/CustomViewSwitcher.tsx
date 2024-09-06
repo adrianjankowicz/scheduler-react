@@ -4,7 +4,7 @@ import {
 import { FormControl, MenuItem, Select } from "@mui/material";
 
 const CustomViewSwitcher = ({ currentViewName, onViewChange }: any) => (
-  <Toolbar.Root className="flex items-center" style={{ borderBottom: 'none' }}>
+  <Toolbar.Root className="flex items-center" style={{ borderBottom: 'none', zIndex: 1 }}>
     <FormControl className='ml-2 rounded-md'>
       <Select
         id="view-select"

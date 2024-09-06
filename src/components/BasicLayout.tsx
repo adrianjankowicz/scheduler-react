@@ -1,14 +1,5 @@
 import { AppointmentForm } from "@devexpress/dx-react-scheduler-material-ui";
-import { Checkbox, FormControl, FormControlLabel, Grid2 as Grid, InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
-
-const CustomAllDayEditor: React.FC<AppointmentForm.BooleanEditorProps> = ({ value, onValueChange, ...restProps }) => (
-  <FormControlLabel
-      control={<Checkbox checked={value} onChange={(e) => onValueChange(e.target.checked)} />}
-      label="Cały dzień"
-      {...restProps}
-  />
-);
-
+import { FormControl, Grid2 as Grid, InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 
 const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: any) => {
   const handleTypeChange = (event: SelectChangeEvent) => {

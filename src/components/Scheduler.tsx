@@ -45,7 +45,7 @@ import pl from "dayjs/locale/pl";
 import BasicLayout from "./BasicLayout";
 import { AppointmentModel } from "../types/types";
 import CustomViewSwitcher from "./CustomViewSwitcher";
-import { DraftAppointment, SourceAppointment } from "./DragDropProvider";
+import { ContainerComponent, DraftAppointment, ResizeComponent, SourceAppointment } from "./DragDropProvider";
 import appointmentColors from "../utils/colors";
 import CustomDateEditor from "./CustomDateEditor";
 
@@ -254,7 +254,7 @@ const SchedulerComponent: React.FC = () => {
             <TodayButton messages={{ today: "Dzisiaj" }} />
             <DateNavigator />
             {/* <ViewSwitcher /> */}
-            <Box className="flex justify-end absolute right-0">
+            <Box className="absolute right-0 z-99">
               <CustomViewSwitcher
                 currentViewName={currentViewName}
                 onViewChange={setCurrentViewName}
@@ -315,6 +315,13 @@ const SchedulerComponent: React.FC = () => {
               sourceAppointmentComponent={(props) => (
                 <SourceAppointment {...props} currentView={currentViewName} />
               )}
+              // resizeComponent={(props) => (
+              //   <ResizeComponent {...props} data={data} currentView={currentViewName} />
+              // )}
+              scrollSpeed={2}
+              // containerComponent={(props) => (
+              //   <ContainerComponent {...props} data={data} currentView={currentViewName} />
+              // )}
             />
           </Scheduler>
         </LocalizationProvider>
