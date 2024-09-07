@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import Paper from "@mui/material/Paper";
 import {
   ViewState,
@@ -45,7 +45,7 @@ import pl from "dayjs/locale/pl";
 import BasicLayout from "./BasicLayout";
 import { AppointmentModel } from "../types/types";
 import CustomViewSwitcher from "./CustomViewSwitcher";
-import { ContainerComponent, DraftAppointment, ResizeComponent, SourceAppointment } from "./DragDropProvider";
+import {DraftAppointment, SourceAppointment } from "./DragDropProvider";
 import appointmentColors from "../utils/colors";
 import CustomDateEditor from "./CustomDateEditor";
 
@@ -220,7 +220,7 @@ const SchedulerComponent: React.FC = () => {
       <Paper>
         <Header />
         <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={pl}>
-          <Scheduler data={data} height={700} locale="pl-PL">
+          <Scheduler data={data} height={779} locale="pl-PL" firstDayOfWeek={1}>
             <ViewState
               currentDate={currentDate.format("YYYY-MM-DD")}
               onCurrentDateChange={(date) => setCurrentDate(dayjs(date))}
@@ -229,8 +229,8 @@ const SchedulerComponent: React.FC = () => {
             />
             <EditingState onCommitChanges={commitChanges} />
             <IntegratedEditing />
-            <DayView startDayHour={5} endDayHour={24} cellDuration={60} />
-            <WeekView startDayHour={5} endDayHour={24} />
+            <DayView startDayHour={7} endDayHour={24} cellDuration={60} />
+            <WeekView startDayHour={7} endDayHour={24} />
             <MonthView />
             <Appointments
               appointmentComponent={({ children, ...restProps }) => {
@@ -315,13 +315,8 @@ const SchedulerComponent: React.FC = () => {
               sourceAppointmentComponent={(props) => (
                 <SourceAppointment {...props} currentView={currentViewName} />
               )}
-              // resizeComponent={(props) => (
-              //   <ResizeComponent {...props} data={data} currentView={currentViewName} />
-              // )}
+              // resizeComponent={() => null}
               scrollSpeed={2}
-              // containerComponent={(props) => (
-              //   <ContainerComponent {...props} data={data} currentView={currentViewName} />
-              // )}
             />
           </Scheduler>
         </LocalizationProvider>

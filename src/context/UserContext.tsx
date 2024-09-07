@@ -3,8 +3,7 @@ import { auth, provider } from '../firebase/firebase';
 import { signInWithPopup, User } from 'firebase/auth';
 import { UserContextType } from '../types/types';
 
-
-const UserContext = createContext<UserContextType | undefined>(undefined);
+export const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);

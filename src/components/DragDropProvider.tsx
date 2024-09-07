@@ -51,7 +51,7 @@ const SourceAppointment = ({ data, style, currentView, ...restProps }: any) => {
       data={data}
       style={{ ...style, backgroundColor, opacity: 0.5 }}
     >
-            {currentView === "Month" ? (
+      {currentView === "Month" ? (
         <Box className="text-white ml-[6px] mt-[1px]">{data.title}</Box>
       ) : currentView === "Week" ? (
         <Box>
@@ -78,4 +78,7 @@ const SourceAppointment = ({ data, style, currentView, ...restProps }: any) => {
   );
 };
 
-export { DraftAppointment, SourceAppointment };
+export {
+  DraftAppointment,
+  SourceAppointment,
+};

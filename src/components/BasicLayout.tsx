@@ -12,13 +12,12 @@ const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: any) => {
       onFieldChange={onFieldChange}
       {...restProps}
     >
-      {console.log(restProps)}
       <Grid container spacing={2} className='mt-4'>
         <Grid size={12}>
           <FormControl fullWidth>
             <InputLabel>Rodzaj Spotkania</InputLabel>
             <Select
-              value={appointmentData.appointmentType || "Osobiste"}
+              value={appointmentData.appointmentType || "Personal"}
               onChange={handleTypeChange}
               label="Rodzaj Spotkania"
             >
