@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/scheduler-react/static/css/main.7b44bf30.css",
-    "main.js": "/scheduler-react/static/js/main.519d883b.js",
+    "main.js": "/scheduler-react/static/js/main.3b60978d.js",
     "static/js/453.95b20201.chunk.js": "/scheduler-react/static/js/453.95b20201.chunk.js",
     "static/media/calendarView4.png": "/scheduler-react/static/media/calendarView4.f8f8d49ec5a45a7b8286.png",
     "static/media/calendarView2.png": "/scheduler-react/static/media/calendarView2.f08c251bc1fb75a33b2b.png",
@@ -9,11 +9,11 @@
     "static/media/calendarView3.png": "/scheduler-react/static/media/calendarView3.d39dd9c9d30ded115a2f.png",
     "index.html": "/scheduler-react/index.html",
     "main.7b44bf30.css.map": "/scheduler-react/static/css/main.7b44bf30.css.map",
-    "main.519d883b.js.map": "/scheduler-react/static/js/main.519d883b.js.map",
+    "main.3b60978d.js.map": "/scheduler-react/static/js/main.3b60978d.js.map",
     "453.95b20201.chunk.js.map": "/scheduler-react/static/js/453.95b20201.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.7b44bf30.css",
-    "static/js/main.519d883b.js"
+    "static/js/main.3b60978d.js"
   ]
 }
