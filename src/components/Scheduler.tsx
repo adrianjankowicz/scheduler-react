@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Paper from "@mui/material/Paper";
 import {
   ViewState,
@@ -315,7 +315,7 @@ const SchedulerComponent: React.FC = () => {
               sourceAppointmentComponent={(props) => (
                 <SourceAppointment {...props} currentView={currentViewName} />
               )}
-              // resizeComponent={() => null}
+              resizeComponent={() => null}
               scrollSpeed={2}
             />
           </Scheduler>
