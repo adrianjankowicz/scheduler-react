@@ -10,6 +10,7 @@ Strona demo aplikacji jest dostępna pod adresem: [https://adrianjankowicz.githu
 - [Instalacja](#instalacja)
 - [Uruchamianie projektu](#uruchamianie-projektu)
 - [Struktura projektu](#struktura-projektu)
+- [Zrzuty ekranu](#zrzuty-ekranu)
 - [Licencja](#licencja)
 
 ## Funkcjonalności
@@ -46,7 +47,7 @@ lub przy użyciu Yarn:
 yarn install
 ```
 
-# Konfiguracja Firebase
+## Konfiguracja Firebase
 
 1. Przejdź do [Firebase Console](https://console.firebase.google.com/).
 2. Utwórz nowy projekt.
@@ -65,7 +66,7 @@ REACT_APP_FIREBASE_APP_ID=id-twojej-aplikacji
 
 ```
 
-# Uruchamianie projektu
+## Uruchamianie projektu
 
 Aby uruchomić aplikację w trybie deweloperskim, wpisz:
 ```bash
@@ -77,7 +78,7 @@ yarn start
 ```
 Aplikacja będzie dostępna pod adresem http://localhost:3000.
 
-# Struktura projektu
+## Struktura projektu
 ```
 scheduler-react/
 │
@@ -97,5 +98,19 @@ scheduler-react/
 └── .gitignore            # Pliki ignorowane przez Git
 ```
 
-# Licencja
+## Zrzuty ekranu
+
+### Strona główna
+![Strona główna](src/images/homeView.png)
+
+### Widok miesiąca
+![Widok miesiąca](src/images/alendarView3.png)
+
+### Widok tygodnia
+![Widok tygodnia](src/images/calendarView2.png)
+
+### Widok miesiąca
+![Widok miesiąca](src/images/calendarView4.png)
+
+## Licencja
 Projekt jest licencjonowany na zasadach licencji MIT. Więcej informacji znajdziesz w pliku LICENSE.
