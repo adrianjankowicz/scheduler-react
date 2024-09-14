@@ -104,7 +104,7 @@ scheduler-react/
 ![Strona główna](src/images/homeView.png)
 
 ### Widok miesiąca
-![Widok miesiąca](src/images/alendarView3.png)
+![Widok miesiąca](src/images/calendarView3.png)
 
 ### Widok tygodnia
 ![Widok tygodnia](src/images/calendarView2.png)
