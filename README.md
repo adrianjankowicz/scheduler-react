@@ -11,7 +11,6 @@ Strona demo aplikacji jest dostępna pod adresem: [https://adrianjankowicz.githu
 - [Uruchamianie projektu](#uruchamianie-projektu)
 - [Struktura projektu](#struktura-projektu)
 - [Zrzuty ekranu](#zrzuty-ekranu)
-- [Licencja](#licencja)
 
 ## Funkcjonalności
 
@@ -111,6 +110,3 @@ scheduler-react/
 
 ### Widok miesiąca
 ![Widok miesiąca](src/images/calendarView4.png)
-
-## Licencja
-Projekt jest licencjonowany na zasadach licencji MIT. Więcej informacji znajdziesz w pliku LICENSE.
